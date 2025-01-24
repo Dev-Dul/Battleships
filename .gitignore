@@ -1,0 +1,24 @@
+#IDE/Editor files
+.vscode/
+node_modules
+dist
+
+#SYSTEM FILES
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+System Volume Information
+
+#Windows-specific files
+AppData/
+Local Settings/
+Application Data/
+Microsoft/VisualStudio/
+Windows/Temp/
+
+#Build / Compilation Files
+*.exe
+*.dll
+*.obj
+*.pdp
+*.ilk
