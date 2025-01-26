@@ -1,4 +1,4 @@
-import { Player } from "./battleship";
+import { celebro, Player } from "./battleship";
 
 
 const table = document.getElementById("table-one");
@@ -161,8 +161,60 @@ const gameEngine = (function(){
 
     let rIndex = 0, cIndex = 0;
     let row = null;
+    let lastMove = null;
+    let clicked = false;
 
-    
+    function Computer(){
+        let a = 0, b = 0, par = null;
+        if(lastMove !== null){
+            let move = celebro(player2);
+            [a, b] = move;
+            par = table.rows[a].cells[b];
+            if(boardEngine.checkAttack(player2, a, b)){
+                if(boardEngine.shipHit(player2, a, b)){
+                    let span = document.createElement("span");
+                    span.classList.add("active");
+                    span.classList.add("hit");
+                    boardEngine.setCurrentPlayer(player2.name);
+
+                    par.appendChild(span);
+                }else{
+                    let span = document.createElement("span");
+                    span.classList.add("active");
+                    boardEngine.setCurrentPlayer(player2.name);
+
+                    par.appendChild(span);
+                }
+              lastMove = [a, b];
+            }else{
+                turnError("Enemy");
+            }
+        }else{
+            let move = celebro(lastMove, player2);
+            [a, b] = move;
+            par = table.rows[a].cells[b];
+            if(boardEngine.checkAttack(player2, a, b)){
+              if(boardEngine.shipHit(player2, a, b)){
+                let span = document.createElement("span");
+                span.classList.add("active");
+                span.classList.add("hit");
+                boardEngine.setCurrentPlayer(player2.name);
+
+                par.appendChild(span);
+              }else{
+                let span = document.createElement("span");
+                span.classList.add("active");
+                boardEngine.setCurrentPlayer(player2.name);
+
+                par.appendChild(span);
+              }
+              lastMove = [a, b];
+
+            }else{
+              turnError("Enemy");
+            }
+        }
+    }
 
     oppCells.forEach((opp) => {
         opp.addEventListener("click", () => {
@@ -171,57 +223,34 @@ const gameEngine = (function(){
             cIndex = opp.cellIndex;
             let cplay = boardEngine.getCurrentPlayer();
 
-            if(boardEngine.checkAttack(player2, rIndex, cIndex) && cplay !== "Computer"){
-                if(boardEngine.shipHit(player2, rIndex, cIndex)){
-                    let span = document.createElement("span");
-                    span.classList.add("active");
-                    span.classList.add("hit");
-                    boardEngine.setCurrentPlayer(name.value);
-
-                    row.appendChild(span);
-                }else{
-                    let span = document.createElement("span");
-                    span.classList.add("active");
-                    boardEngine.setCurrentPlayer(name.value);
-
-                    row.appendChild(span);
-                }
-            }else{
-                let [ r, c ] = celebro(player2);
-                let cell = table.rows[r].cells[c];
-                opp.classList.add("disabled");
-            }
-
-            if(cplay === "Computer"){
-
-            }
-        })
-    })
-
-    playerCells.forEach((cell) => {
-        cell.addEventListener("click", () => {
-            row = cell.parentElement;
-            rIndex = row.rowIndex;
-            cIndex = cell.cellIndex;
-
-            if(!boardEngine.checkAttack(player1, rIndex, cIndex)){
+            if(boardEngine.checkAttack(player1, rIndex, cIndex) && cplay !== "Computer"){
                 if(boardEngine.shipHit(player1, rIndex, cIndex)){
                     let span = document.createElement("span");
                     span.classList.add("active");
                     span.classList.add("hit");
+                    boardEngine.setCurrentPlayer(name.value);
 
-                    row.appendChild(span);
+                    opp.appendChild(span);
                 }else{
                     let span = document.createElement("span");
                     span.classList.add("active");
+                    boardEngine.setCurrentPlayer(name.value);
 
-                    row.appendChild(span);
+                    opp.appendChild(span);
                 }
-            }else{
-                cell.classList.add("disabled");
+
+                setTimeout(() => {
+                    oppCells.forEach((opp) => {
+                        opp.classList.add("disabled");
+                    });
+
+                    Computer();
+
+                }, 2000)
             }
         })
     })
+
 
     function getPlayers(){
         return players;
