@@ -122,7 +122,7 @@ class GameBoard{
     receiveAttack(x, y){
         for(let i = 0; i < this.ships.length; i++){
             let [a, b] = this.ships[i].coords();
-            if(x === a && y <= b){
+            if(x >= a && y <= b){
                 this.ships[i].addHit();
                 this.hits[x][y] = 1;
                 return true;
@@ -141,6 +141,16 @@ class GameBoard{
             return true;
         }else{
             return false;
+        }
+    }
+
+    reset(){
+        for(let i = 0; i < this.#grid.length; i++){
+            for(let j = 0; j < this.#grid[i].length; j++){
+                this.#grid[i][j] = 0;
+                this.#misses[i][j] = 0;
+                this.hits[i][j] = 0;
+            }
         }
     }
 }
