@@ -3,34 +3,9 @@ import { celebro, Player } from "./battleship";
 
 const table = document.getElementById("table-one");
 const table2 = document.getElementById("table-two");
+const start = document.getElementById("start");
+const play = document.getElementById("play");
 
-// This module sets up the game. It handles stuff like displaying the game page, filling in player names.
-const setUp = (function(){
-    let start = document.getElementById("start");
-    let play = document.getElementById("play");
-    let nameErr = document.querySelector(".nameErr");
-    const playerBoard = document.querySelectorAll(".player-board");
-
-    play.addEventListener("click", () => {
-        loadPage.classList.remove("active");
-        startPage.classList.add("active");
-    });
-
-    start.addEventListener("click", () => {
-        let name = document.querySelector("#Player-name");
-        let select = document.querySelector("#select");
-        if(name.value === ''){
-            nameErr.classList.add("active");
-        }else{
-            playerBoard[0].textContent = name.value;
-            playerBoard[1].textContent = select.value;
-        }
-
-        boardEngine.setCurrentPlayer(name.value);
-
-    });
-
-})();
 
 const domManager = (function(){
     const turnErr = document.getElementById("turn-err");
@@ -90,7 +65,11 @@ const domManager = (function(){
         winnerBoard.classList.add("active");
     }
 
-    return { updateCell, turnError, showError, getPlayerName, fCellEvents, cellEvents, getCoordinates, announceWinner };
+    function setBoard(){
+        
+    }
+
+    return { updateCell, turnError, showError, getPlayerName, fCellEvents, cellEvents, getCoordinates, announceWinner, setBoard };
 })();
 
 // This module handles board logic like fetching current player, checking whether an attack is valid or if the attack hits the ship
@@ -99,7 +78,7 @@ const boardEngine = (function(){
     const currentPlayer = null;
 
     function setCurrentPlayer(user){
-        currentPlayer = user === name.value ? "Computer" : name.value;
+        currentPlayer = user === name.value ? "Enemy" : name.value;
     }
     
     function getCurrentPlayer(){
@@ -161,9 +140,10 @@ const placeEngine = (function(){
         }  
     }
     
-
+    // Set Event listeners up for placing ships on the grid (for user)
     domManager.fCellEvents(fCells);
 
+    // Function to place ships for opponent (Enemy)
     function placeShips(){
        let axis = ['x', 'y'];
        let elem = axis[Math.random() < 0.5 ? 0 : 1];
@@ -193,7 +173,7 @@ const placeEngine = (function(){
        }
     }
 
-    return { placeShips, fCells };
+    return { placeShips };
 
 })();
 
@@ -201,7 +181,7 @@ const gameEngine = (function(){
     let name = domManager.getPlayerName();
 
     const player1 = new Player(name.value);
-    const player2 = new Player("Computer");
+    const player2 = new Player("Enemy");
     const players = [player1, player2];
 
     let rIndex = 0, cIndex = 0;
@@ -250,3 +230,27 @@ const gameEngine = (function(){
     return { cells, getPlayers };
 
 })();
+
+function gameInit(){
+    let name = domManager.getPlayerName();
+    const playerBoard = document.querySelector(".player-board");
+    if(name.value === ""){
+      domManager.showError("Player name is required");
+    }
+
+    playerBoard[0].textContent = name.value;
+    playerBoard[1].textContent = "Enemy";
+    placeEngine.placeShips();
+    boardEngine.setCurrentPlayer(name.value);
+    
+}
+
+
+play.addEventListener("click", () => {
+    const loadPage = document.querySelector("#loadpage");
+    const startPage = document.querySelector("#startpage");
+    loadPage.classList.remove("active");
+    startPage.classList.add("active");
+});
+
+start.addEventListener("click", gameInit);
