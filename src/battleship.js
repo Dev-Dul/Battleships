@@ -1,8 +1,9 @@
-class ship{
-    constructor(crd, length, name){
+class Ship{
+    constructor(crd, length, name, axis = 'x'){
         this.name = name;
         this.hit = 0;
         this.crd = crd;
+        this.axis = axis;
         this.length = length;
     }
 
@@ -20,7 +21,7 @@ class ship{
 
     coords(){
         let a = this.crd[0];
-        let coord = [a, this.length];
+        let coord = this.axis === "x" ? [a, this.length - 1] : [a ];
         return coord;
     }
 }
@@ -50,19 +51,25 @@ class GameBoard{
         return bounds;
     }
 
-    checkSpace(x, y, ship){
-      let isFree = false;
-      // Check if all the cells to place the ship are available
-      for(let i = 0; i < ship.length; i++){
-        if(this.#grid[x][y] !== 0){
-          isFree = false;
-        }else{
-          isFree = true;
+    checkSpace(x, y, ship, axis = 'x'){
+        // Check if all the cells to place the ship are 
+      if(axis === "y"){
+        for(let i = 0; i < ship.length; i++){
+            if(this.#grid[x][y + i] !== 0){
+                return false;
+            }
         }
-        x++;
+      }else{
+
+          for(let i = 0; i < ship.length; i++){
+            if(this.#grid[x + i][y] !== 0){
+                return false;
+            }
+          }
+
       }
 
-      return isFree;
+      return true;
     }
 
     place(crd, name, length, axis = "x"){
@@ -71,16 +78,16 @@ class GameBoard{
         if(axis === "y"){
           // First check to see whether the coordinates are within range
           if(this.checkBounds(x, y, length)){
-            let ship = new ship(crd, length, name);
-            this.ships.push(ship);
-
+            let ship = new Ship(crd, length, name, "y");
+            
             // Proceed to placing ship only if selected coordinate is not occupied.
-            if(this.checkSpace(x, y, ship)){
-              for(let i = 0; i < length; i++){
-                this.#grid[x][y] = 1;
-                x++;
-              }
-
+            if(this.checkSpace(x, y, ship, axis)){
+                for(let i = 0; i < length; i++){
+                    this.#grid[x][y] = 1;
+                    x++;
+                }
+                this.ships.push(ship);
+                
             }else{
               throw new Error("Coordinate already taken");
             }
@@ -93,15 +100,15 @@ class GameBoard{
 
             // First check to see whether the coordinates are within range
             if(this.checkBounds(x, y, length)){
-                let ship = new ship(crd, length, name);
-                this.ships.push(ship);
-
+                let ship = new Ship(crd, length, name);
+                
                 // Proceed to placing ship only if selected coordinate is not occupied.
                 if(this.checkSpace(x, y, ship)){
                     for(let i = 0; i < length; i++){
                         this.#grid[x][y] = 1;  
                         y++;
                     }
+                    this.ships.push(ship);
                 }else{
                     throw new Error("Coordinate already taken");
                 }    
@@ -119,19 +126,44 @@ class GameBoard{
         return this.hits;
     }
 
-    receiveAttack(x, y){
-        for(let i = 0; i < this.ships.length; i++){
-            let [a, b] = this.ships[i].coords();
-            if(x >= a && y <= b){
-                this.ships[i].addHit();
-                this.hits[x][y] = 1;
-                return true;
-            }else{
-                this.#misses[x][y] = 1;
-                this.hits[x][y] = 1;
-                return false;
+    getMisses(){
+        return this.#misses;
+    }
+
+    getCells(ship){
+        let cells = [];
+        let [row, col] = ship.crd;
+
+        if(ship.axis === 'x'){
+            for(let i = 0; i < ship.length; i++){
+                cells.push({x: row, y: col + i });
+            }
+        }else{
+            for(let i = 0; i < ship.length; i++){
+              cells.push({ x: row + i, y: col });
             }
         }
+
+        return cells;
+    }
+
+    receiveAttack(x, y){
+        for(const ship of this.ships){
+            const occupiedCells = this.getCells(ship);
+
+            for(const cell of occupiedCells){
+                if(cell.x === x && cell.y === y){
+                    ship.addHit();
+                    this.hits[x][y] = 1;
+                    return true;
+                }
+            }
+        }
+
+        this.#misses[x][y] = 1;
+        this.hits[x][y] = 1;
+        return false;
+    
     }
 
     doom(){
@@ -145,6 +177,7 @@ class GameBoard{
     }
 
     reset(){
+        this.ships = [];
         for(let i = 0; i < this.#grid.length; i++){
             for(let j = 0; j < this.#grid[i].length; j++){
                 this.#grid[i][j] = 0;
@@ -211,4 +244,4 @@ function celebro(cord = null, player){
 
 }
 
-export {GameBoard, Player, celebro };
+export {GameBoard, Player, celebro, Ship };

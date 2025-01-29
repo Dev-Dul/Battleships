@@ -166,7 +166,11 @@ const placeEngine = (function(){
            } 
 
            if(i === 3){
-               players[1].gameboard.place(crd, shipArr[i], 3, elem);
+               try{
+                   players[1].gameboard.place(crd, shipArr[i], 3, elem);
+               }catch(error){
+                domManager.showError(error.message);
+               }
            }else{
                players[1].gameboard.place(crd, shipArr[i], length, elem);
            }
@@ -231,6 +235,8 @@ const gameEngine = (function(){
 
 })();
 
+
+// Driver Code
 function gameInit(){
     let name = domManager.getPlayerName();
     const playerBoard = document.querySelector(".player-board");
