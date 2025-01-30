@@ -1,4 +1,5 @@
 import { celebro, Player } from "./battleship";
+import './styles.css';
 
 
 const table = document.getElementById("table-one");

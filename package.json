@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "template",
   "main": "index.js",
-  "type": "module",
+  "type": "commonJS",
   "scripts": {
     "test": "jest --coverage",
     "build": "webpack --config webpack.prod.js",

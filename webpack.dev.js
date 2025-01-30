@@ -15,7 +15,12 @@ module.exports = {
 
     devtool: "eval-source-map",
     devServer: {
+        contentBase: './dist',
+        hot: true,
+        open: true,
+        port: 8080,
         watchFiles: ["./src/template.html"],
+        watchContentBase: true,
     },
 
     plugins: [
