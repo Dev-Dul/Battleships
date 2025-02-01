@@ -5,9 +5,11 @@ test("Checkspace checks whether there's available space to place the ship", () =
     let ship1 = new Ship([0, 3], 4, "Destroyer");
     let ship2 = new Ship([0, 3], 5, "Carrier");
     let board = new GameBoard();
-
+    
     board.place([0, 3], "Destroyer", 4);
     board.place([1, 5], "Carrier", 5);
+    console.log(board.getGrid());
+    console.log(board.getGrid()[0][4]);
     
     expect(board.checkSpace(0, 3, ship1)).toBe(false);
     expect(board.checkSpace(2, 3, ship2)).toBe(true);

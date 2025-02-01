@@ -41,10 +41,10 @@ class GameBoard{
         }
     }
 
-    checkBounds(x, y, length){
-        let check = this.#grid.length - length;
+    checkBounds(x, y, length, axis = 'x'){
+        let check = axis === 'x' ? x + length <= this.#grid.length : y + length <= this.#grid.length;
         let bounds = false;
-        if((x < 9 && y < 9) && (check >= length)){
+        if((x < 9 && y < 9) && check){
           bounds = true;
         }
 
@@ -52,17 +52,17 @@ class GameBoard{
     }
 
     checkSpace(x, y, ship, axis = 'x'){
-        // Check if all the cells to place the ship are 
+     // Check if all the cells to place the ship are 
       if(axis === "y"){
         for(let i = 0; i < ship.length; i++){
-            if(this.#grid[x][y + i] !== 0){
+            if(this.#grid[x + i][y] !== 0){
                 return false;
             }
         }
       }else{
 
           for(let i = 0; i < ship.length; i++){
-            if(this.#grid[x + i][y] !== 0){
+            if(this.#grid[x][y + i] !== 0){
                 return false;
             }
           }
@@ -75,9 +75,13 @@ class GameBoard{
     place(crd, name, length, axis = "x"){
         let [x, y] = crd;
 
+        // console.log(axis);
+        // console.log(crd);
+        // console.log(this.#grid);
+
         if(axis === "y"){
           // First check to see whether the coordinates are within range
-          if(this.checkBounds(x, y, length)){
+          if(this.checkBounds(x, y, length, axis)){
             let ship = new Ship(crd, length, name, "y");
             
             // Proceed to placing ship only if selected coordinate is not occupied.

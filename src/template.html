@@ -10,16 +10,17 @@
         <p class="err-msg">Error!!</p>
         <div class="close"></div>
     </div>
-    <div class="load-page hidden" id="load-page">
+
+    <div class="load-page" id="load-page">
         <div class="lheader">
             <h2>Battleships</h2>
         </div>
         <div class="main">
-            <p>Welcome to the Ultimate Naval Battle!.</p>
-            <p>Prepare to conquer the Sea!.</p>
+            <p class="typed-text"></p>
+            <p class="typed-text"></p>
         </div>
         <div class="btn-wrapper">
-            <button type="button">Play</button>
+            <button type="button" id="play">Play</button>
         </div>
     </div>
     <div class="start-page hidden" id="start-page">
@@ -31,8 +32,8 @@
         </div>
         <div class="place">
             <p>Click on a cell to deploy your ships Admiral!</p>
-            <p>Deploy Your <span>Carrier</span></p>
-            <table>
+            <p class="deploy">Deploy Your <span>Carrier</span></p>
+            <table class="first">
                 <tr>
                     <td></td>
                     <td></td>
@@ -156,10 +157,10 @@
             </table>
         </div>
         <div class="start">
-            <button>Start</button>
+            <button id="start">Start</button>
         </div>
     </div>
-    <div class="main">
+    <div class="main-page hidden" id="main-page">
         <div class="info">
             <div class="text">
                 <div class="main-text">
@@ -184,14 +185,14 @@
                 </div>
             </div>
             <div class="name">
-                <h2>Name</h2>
+                <h2 class="player-board">Name</h2>
             </div>
             <div class="hits">
                 <p>Hits</p>
                 <p><span id="enemy-hits">0</span> : <span id="ad-hits">0</span></p>
             </div>
             <div class="enemy">
-                <h2>Enemy</h2>
+                <h2 class="player-board">Enemy</h2>
             </div>
         </div>
         <div class="grid">
