@@ -55,7 +55,17 @@ table, tr, td{
     border: 1px solid;
 }
 
-.load-page, .start-page, .main{
+table tr, td{
+    position: relative;
+}
+
+td > span{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.load-page, .start-page, .main-page{
     height: 100vh;
     width: 100%;
     display: flex;
@@ -119,6 +129,8 @@ input[name="name"]{
     height: 3rem;
     width: 10rem;
     padding: 0 5px;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .place p{
@@ -133,8 +145,25 @@ table{
     height: 350px;
 }
 
+.ship{
+    pointer-events: none;
+    transition: all 1.3s ease;
+}
+
 .deploy{
     margin: 10px 0;
+}
+
+@keyframes up{
+    50%{
+        opacity: 0;
+    }
+}
+
+.levitate{
+    transition: all 2s ease;
+    transform: translateY(-1500px);
+    animation: up 1.5s linear;
 }
 
 table.first{
@@ -142,8 +171,20 @@ table.first{
     height: 300px;
 }
 
+p.tip{
+    font-size: 1rem;
+}
+
 .start button{
     padding: 0.7rem 3rem;
+    transition: all 1.5s ease;
+    opacity: 0;
+    transform: translateY(100vh);
+}
+
+.start button.active{
+    opacity: 1;
+    transform: translate(0);
 }
 
 /* Main page Styles */
@@ -169,26 +210,40 @@ table.first{
     left: 40px;
     height: 20px;
     width: 20px;
-    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    transition: all .5s ease;
+}
+
+.settings.shade{
+    opacity: 0.7;
 }
 
 .inner{
-    height: 200%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: 20px;
+    height: 40px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid red;
+    border: 1px solid;
+    transition: all 2s ease;
     opacity: 0;
-    z-index: -1;
-    display: none;
 }
 
+.inner.active{
+    opacity: 1;
+}
 
 .deck{
     height: 3rem;
-    width: 80%;
+    width: 60%;
     border: 1px solid;
     margin: 0 auto;
     padding: 10px;
@@ -217,18 +272,20 @@ table.first{
     opacity: 1;
 }
 
+
 .txt{
     position: absolute;
     left: 0;
     right: 0;
+    margin: auto;
     top: 45vh;
-    width: 100%;
+    width: 80%;
     height: 10%;
     scale: 3;
     opacity: 0;
+    text-align: center;
     border: 2px solid red;
-    transition: all 0.5s ease;
-
+    transition: all 2s ease;
 }
 
 .txt.active{
@@ -236,16 +293,64 @@ table.first{
     opacity: 1;
 }
 
-.info{
+.txt p{
+    padding: 15px;
+    margin: 0;
+}
+
+.cls{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 0;
+    top: -50%;
+}
+
+.cls i{
+    font-size: 1.5rem;
+}
+
+.txt button{
+    display: block;
+    padding: 0.7rem;
+    margin: 0 auto;
+    margin-top: 25px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+.ovl{
     position: fixed;
-    width: 70%;
-    height: 40%;
+    height: 100vh;
+    width: 100%;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    transition: all 1s ease;
+    transform: translateX(100vw);
+}
+
+.ovl.active{
+    transform: translate(0);
+}
+
+.info{
+    position: absolute;
+    width: 75%;
+    height: 60%;
     right: 0;
     bottom: 0;
     display: flex;
     align-items: center;
     border: 1px solid;
+    transition: all 1s ease;
     transform: translateX(100vw);
+}
+
+.info.active{
+    transform: translate(0);
 }
 
 .info > div{
@@ -260,14 +365,54 @@ table.first{
 }
 
 .main-text{
-    height: 30%;
+    height: 35%;
     width: 100%;
     border: 3px solid red;
     border-radius: 15px;
+    padding: 10px;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
-.grid > h2{
+.main-text p{
+    color: white;
+    white-space: pre-line;
+}
+
+.grid{
+    width: 100%;
+}
+
+.show{
+    opacity: 1;
+}
+
+.waters{ 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.waters h2{
     text-align: center;
+}
+
+.disabled{
+    pointer-events: none;
+}
+
+td span{
+    width: 50%;
+    height: 50%;
+    z-index: 10;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+}
+
+span.hit{
+    background: red;
 }
 
 

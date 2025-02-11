@@ -52,32 +52,29 @@ class GameBoard{
     }
 
     checkSpace(x, y, ship, axis = 'x'){
+        let valid = true;
      // Check if all the cells to place the ship are 
       if(axis === "y"){
         for(let i = 0; i < ship.length; i++){
             if(this.#grid[x + i][y] !== 0){
-                return false;
+                valid = false;
             }
         }
       }else{
 
           for(let i = 0; i < ship.length; i++){
             if(this.#grid[x][y + i] !== 0){
-                return false;
+                valid = false;
             }
           }
 
       }
 
-      return true;
+      return valid;
     }
 
     place(crd, name, length, axis = "x"){
         let [x, y] = crd;
-
-        // console.log(axis);
-        // console.log(crd);
-        // console.log(this.#grid);
 
         if(axis === "y"){
           // First check to see whether the coordinates are within range
@@ -152,24 +149,64 @@ class GameBoard{
     }
 
     receiveAttack(x, y){
+        let attack = false;
         for(const ship of this.ships){
             const occupiedCells = this.getCells(ship);
 
             for(const cell of occupiedCells){
                 if(cell.x === x && cell.y === y){
-                    ship.addHit();
-                    this.hits[x][y] = 1;
-                    return true;
+                    if(this.hits[x][y] !== 1){
+                        ship.addHit();
+                        this.hits[x][y] = 1;
+                    }
+
+                    attack = true;
+                    break;
                 }
             }
+
+            if(attack) break;
         }
 
-        this.#misses[x][y] = 1;
-        this.hits[x][y] = 1;
-        return false;
-    
-    }
+        
 
+        if(!attack){
+            this.#misses[x][y] = 1;
+        }
+
+        return attack;
+    }
+    
+    isShipSunk(x, y){
+        let sunk = false;
+        let theCoords = [] ;
+        for(const ship of this.ships){
+            console.log(ship);
+            const occupiedCells = this.getCells(ship);
+
+            for(const cell of occupiedCells){
+                if(cell.x === x && cell.y === y){
+                    if(ship.isSunk()){
+                        theCoords = ship.crd;
+                        sunk = true;
+                        console.log(this.getHits());
+                        console.log(ship.length);
+                        console.log(ship.hit);
+                        break;
+                    }
+                }
+            }
+
+            if(sunk) break;
+        }
+
+        if(sunk){
+            return theCoords;
+        }else{
+            return false;
+        }
+    }
+    
     doom(){
         // Check whether all ships are sunk or not
         let check = this.ships.every((ship) => ship.isSunk());
@@ -202,25 +239,37 @@ class Player{
 function celebro(cord = null, player){
     let x = 0, y = 0;
     let move = [null, null];
-    let grid = player.gameboard.getGrid();
+    let hits = player.gameboard.getHits();
+    let Misses = player.gameboard.getMisses();
 
     if(cord !== null){
         let [a, b] = cord;
-        y = Math.floor(Math.random() * 10);
 
-        if(grid[a][y] !== 0){
-          while(grid[a][y] !== 0){
-            y = Math.floor(Math.random() * 10);
-          }
+        if((hits[a][b + 1] === 0 && (b + 1) < 9) && (Misses[a][b + 1] === 0 && (b + 1) < 9)){
 
-          move = [a, y];
-          grid[a][y] = 1;
+          move = [a, b + 1];
           return move;
 
+        }else if((hits[a][b - 1] === 0 && (b - 1) < 9) && (Misses[a][b - 1] === 0 && (b - 1) < 9)){
+
+          move = [a, b - 1];
+          return move;
+          
         }else{
-          move = [a, y];
-          grid[a][y] = 1;
-          return move;
+            let [a, b] = cord;
+            // x = Math.floor(Math.random() * 10);
+            y = Math.floor(Math.random() * 10);
+
+            if(hits[a][y] !== 0 && Misses[a][y] !== 0){
+                while(hits[a][y] !== 0 && Misses[a][y] !== 0) {
+                  x = Math.floor(Math.random() * 10);
+                  y = Math.floor(Math.random() * 10);
+                }
+            }
+
+            move = [a, y];
+            return move;
+            
         }
 
     }else{
@@ -228,20 +277,21 @@ function celebro(cord = null, player){
         x = Math.floor(Math.random() * 10);
         y = Math.floor(Math.random() * 10);
         
-        if(grid[x][y] !== 0){
-            while(grid[x][y] !== 0){
+        
+
+        if(hits[x][y] !== 0 && Misses[x][y] !== 0){
+            while(hits[x][y] !== 0 && Misses[x][y] !== 0){
                 x = Math.floor(Math.random() * 10);
                 y = Math.floor(Math.random() * 10);
             }
+            
 
             move = [x, y];
-            grid[x][y] = 1;
             return move;
 
         }else{
             
              move = [x, y];
-             grid[x][y] = 1;
              return move;
         }    
     }

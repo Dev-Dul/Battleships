@@ -1,43 +1,191 @@
 import { celebro, Player } from "./battleship";
-import { vertical, horizontal } from "./images";
+import { horizontal, vertical } from "./images.js";
+import "@fortawesome/fontawesome-free/css/all.css";
 import './styles.css';
 
 
-const table = document.getElementById("table-one");
-const table2 = document.getElementById("table-two");
+const table = document.querySelector("table.first");
+const table2 = document.querySelector("table.enemy");
 const start = document.getElementById("start");
 const play = document.getElementById("play");
 const name = document.getElementById("name");
 
 let gameInstance = null;
 
-
 function gameWrapper(){
     const domManager = (function(){
         const showErr = document.querySelector(".error");
         const firstCells = document.querySelectorAll("table.first td");
-        const oppCells = document.querySelectorAll(".opp-cell");
-        const winnerBoard = document.getElementById("winnerboard");
+        const oppCells = document.querySelectorAll("table.enemy td");
+        const overlay = document.querySelector(".overlay");
+        const shipName = document.querySelector(".shipname");
+        const deploy = document.querySelector(".deploy");
+        const display = document.querySelector(".display");
+        const settings = document.querySelector(".settings");
+        const inner = settings.querySelector(".inner");
+        const cls = overlay.querySelector(".cls");
+        const reset = overlay.querySelector(".overlay button");
+        const counts = document.querySelectorAll(".hit-count");
+        const ovl = document.querySelector(".ovl");
+        const info = document.querySelector(".info");
+
+
+        settings.addEventListener("click", () => {
+            if(inner.classList.contains("active")){
+                inner.classList.remove("active");
+                settings.classList.remove("shade");
+            }else{
+                inner.classList.add("active");
+                settings.classList.add("shade");
+            }
+        });
+
+        cls.addEventListener("click", () => {
+            overlay.classList.remove("active");
+        });
+
+        reset.addEventListener("click", () => {
+            window.location.reload();
+        });
+
+        function displayComm(text = "Waiting For Your Orders Admiral!.") {
+          // If there's an ongoing interval, clear it.
+          if(display.intervalId){
+            clearInterval(display.intervalId);
+            display.intervalId = null;
+          }
+
+          // Clear the display text and use the provided text as the content.
+          display.textContent = "";
+          const content = text;
+          let charIndex = 0;
+
+          const interval = setInterval(() => {
+            if(charIndex < content.length){
+              display.textContent += content.charAt(charIndex);
+              charIndex++;
+            }else{
+              clearInterval(interval);
+              display.intervalId = null;
+            }
+          }, 50);
+
+          // Save the interval ID so it can be cleared if displayComm is called again.
+          display.intervalId = interval;
+        }
+
         
-        function updateCell(x, y, hit, table){
+        function updateCell(x, y, hit = false, table){
+            let cls = table.getAttribute("class");
             let cell = table.rows[x].cells[y];
             let span = document.createElement("span");
-            span.classList.add("active");
-            if(hit) span.classList.add("hit");
+
+            if(hit){
+
+                span.classList.add("hit");
+                if(cls === "enemy"){
+                    counts[1].textContent = parseInt(counts[1].textContent) + 1;
+                    displayComm("Missile Impact Confirmed Admiral!")
+                }else{
+                    counts[0].textContent = parseInt(counts[0].textContent) + 1;
+                    displayComm("We've been hit Admiral!")
+                }
+
+            }else{
+
+                if(cls === "enemy"){
+                    displayComm("Our Missiles Missed!")
+                }else{
+                    displayComm("Inbound Warheads Evaded!")
+                }
+            }
 
             cell.appendChild(span);
         }
 
-        // function turnError(){
-        //     let p = turnErr.querySelector("p");
-        //     p.textContent = `Not too fast mate!, it's ${boardEngine.getCurrentPlayer}'s turn`;
-        //     turnErr.classList.add("active");
-        // }
+        function showInfo(){
+            let charIndex = 0;
+            let welcome = "Welcome aboard Admiral.\nIncoming enemy fleet detected. They are employing advanced tactical manuevers and utilizing cloaking technology. Estimated time of Arrival: 2Minutes. We advise immediate readiness for evasive action and countermeasures. "
+            let text = info.querySelector(".main-text p");
+            ovl.classList.add("active");
 
+            if(text.intervalId){
+              clearInterval(text.intervalId);
+              text.intervalId = null;
+            }
+
+            setTimeout(() => {
+                info.classList.add("active");
+                const interval = setInterval(() => {
+                  if(charIndex < welcome.length){
+                    text.textContent += welcome.charAt(charIndex);
+                    charIndex++;
+                  }else{
+                    setTimeout(() => {
+                        showError("If You're On Mobile, Rotate Your Phone For A Better Experience.")
+                        info.classList.remove("active");
+                        ovl.classList.remove("active");
+                        clearInterval(interval);
+                        text.intervalId = null;
+                    }, 2500);
+                  }
+                }, 60);
+
+                text.intervalId = interval;
+            }, 500);
+
+        }
+
+        let counter = 0;
+        function updateShipName(ship){
+            if(counter === 4){
+                deploy.textContent = "All Ships Deployed!";
+                start.classList.add("active");
+            }
+
+            shipName.classList.add("levitate");
+            setTimeout(() => {
+                shipName.textContent = ship;
+                shipName.classList.remove("levitate");
+            }, 500);
+            
+            counter++;
+        }
+
+        function placeShipImage(x, y, length, table, shipSrc, axis, opac = false){
+            const cell = table.rows[x].cells[y];
+            // if(!cell) return;
+
+            const img = document.createElement("img");
+            img.src = shipSrc;
+            img.classList.add("ship");
+
+            // Make the ship opaque if it belongs to the enemy grid                
+            if(opac) img.style.opacity = "0";
+            img.style.position = "absolute";
+            img.style.left = "0px";
+            img.style.top = `${cell.offsetTop}px`;
+
+            // Set size based on axis
+            const size = cell.getBoundingClientRect().width;
+            img.style.width = axis === 'x' ? `${size * length}px` : `${size}px`;
+            img.style.height = axis === 'x' ? `${size}px` : `${size * length}px`;
+
+            cell.appendChild(img);
+
+        }
+
+        let errorTimeout;
         function showError(message){
+            clearTimeout(errorTimeout);
+
             let p = showErr.querySelector("p");
             p.textContent = message;
             showErr.classList.add("active");
+
+            errorTimeout = setTimeout(() => {
+                showErr.classList.remove("active");
+            }, 2000);
         }
 
         function getPlayerName(){
@@ -45,7 +193,6 @@ function gameWrapper(){
         }
 
         function fCellEvents(callback){
-            console.log(firstCells);
             firstCells.forEach((cell) => {
                 cell.addEventListener("click", () => callback(cell));
             });
@@ -53,8 +200,20 @@ function gameWrapper(){
 
         function cellEvents(callback){
             oppCells.forEach((cell) => {
-                cell.addEventListener("click", callback(cell));
+                cell.addEventListener("click", () => callback(cell));
             });
+        }
+
+        function flick(stat = 'on'){
+            if(stat === 'off'){
+                oppCells.forEach((cell) => {
+                    cell.classList.add("disabled");
+                });
+            }else{
+                oppCells.forEach((cell) => {
+                  cell.classList.remove("disabled");
+                });
+            }
         }
 
 
@@ -66,13 +225,14 @@ function gameWrapper(){
             return [rowIndex, colIndex];
         }
 
-        function announceWinner(name){
-            let winner = winnerBoard.querySelector(".winner");
-            winner.textContent = `Marshall ${name} won!!`;
-            winnerBoard.classList.add("active");
+        function announceWinner(winnerName){
+            let winner = overlay.querySelector(".txt p");
+            winner.textContent = `Admiral ${winnerName} won this battle!!`;
+            overlay.classList.add("active");
+            winner.parentElement.classList.add("active");
         }
 
-        return { updateCell, showError, getPlayerName, fCellEvents, cellEvents, getCoordinates, announceWinner };
+        return { updateCell, showError, getPlayerName, fCellEvents, cellEvents, getCoordinates, announceWinner, placeShipImage, updateShipName, displayComm, flick, showInfo };
     })();
 
     // This module handles board logic like fetching current player, checking whether an attack is valid or if the attack hits the ship
@@ -91,7 +251,8 @@ function gameWrapper(){
         // Check Whether the attack is valid
         function checkAttack(player, x, y){
             let hits = player.gameboard.getHits();
-            if(hits[x][y] !== 0){
+            let Misses = player.gameboard.getMisses();
+            if(hits[x][y] !== 0 || Misses[x][y] !== 0){
                 return false;
             }else{
                 player.gameboard.receiveAttack(x, y);
@@ -102,7 +263,7 @@ function gameWrapper(){
         // Check whether a ship was hit
         function shipHit(player, x, y){
             if(player.gameboard.doom()){
-                domManager.announceWinner(player.name);
+                return 2;
             }
 
             if(player.gameboard.receiveAttack(x, y)){
@@ -118,50 +279,105 @@ function gameWrapper(){
 
 
     const gameEngine = (function(){
-        // let name = domManager.getPlayerName();
 
         const player1 = new Player(name.value);
         const player2 = new Player("Enemy");
         const players = [player1, player2];
+        let awayTimeout, enemyTimeout;
+        let parent = null, enemyCells = null;
 
         let rIndex = 0, cIndex = 0;
         let lastMove = null;
 
-        function Computer(){
-            let [a, b] = lastMove ? celebro(lastMove, player2) : celebro(player2);
-            play(player2, a, b, table2);
-            lastMove = [a, b];
-
-        }
+        
 
         function play(player, rIndex, cIndex, table){
             if(boardEngine.checkAttack(player, rIndex, cIndex)){
-                if(boardEngine.shipHit(player, rIndex, cIndex)){
+                let isHit =  boardEngine.shipHit(player, rIndex, cIndex);
+
+                if(isHit === true){
                     domManager.updateCell(rIndex, cIndex, true, table);
+
+                }else if(isHit === 2){
+                    domManager.updateCell(rIndex, cIndex, true, table);
+                    domManager.announceWinner(boardEngine.getCurrentPlayer());
+
+                }else{
+                    domManager.updateCell(rIndex, cIndex, false, table);
                 }
+
             }else{
                 domManager.showError("Invalid Move");
             }
+
+            if(player.name === 'Enemy' && boardEngine.shipHit(player, rIndex, cIndex)){
+                let ish = player.gameboard.isShipSunk(rIndex, cIndex);
+                if(ish){
+                    let [row, col] = ish;
+                    let td = table.rows[row].cells[col];
+                    console.log(td);
+                    let img = td.querySelector("img");
+                    img.style.opacity = '1';
+                }
+            }
+        }
+
+        function Computer(){
+            let a = 0, b = 0;
+            if(lastMove !== null){
+                let [x, y] = lastMove;
+                [a, b] =  player1.gameboard.receiveAttack(x, y) ? celebro(lastMove, player2) : celebro(null, player2);
+                play(player1, a, b, document.querySelector("table.player"));
+
+            }else{
+
+                [a, b] = celebro(null, player2);
+                play(player1, a, b, document.querySelector("table.player"));
+            }
+
+            lastMove = [a, b];
         }
 
         function cells(elem){
+            clearTimeout(awayTimeout);
+            clearTimeout(enemyTimeout);
+            
+            let current = boardEngine.getCurrentPlayer();
+            console.log(current);
+            parent = elem.closest("table");
+            enemyCells = parent.querySelectorAll("td");
+
             [rIndex, cIndex] = domManager.getCoordinates(elem);
+            const msl = "Missiles Away!!", delay = msl.length * 100;
+            domManager.displayComm(msl);
 
-            play(player1, rIndex, cIndex, table);
-            boardEngine.setCurrentPlayer(player1.name);
+            awayTimeout = setTimeout(() => {
+                play(player2, rIndex, cIndex, table2);
+                boardEngine.setCurrentPlayer(player1.name);
+            }, delay);
 
-            setTimeout(() => {
-            oppCells.forEach((opp) => {
+            enemyCells.forEach((opp) => {
                 opp.classList.add("disabled");
             });
 
-            Computer();
-            boardEngine.setCurrentPlayer(player1.name);
-            }, 2000);
+            const tg = "Enemy Is Targeting...", tgDelay = delay + (tg.length * 50);
+            console.log(`delay: ${delay}, tgDelay: ${tgDelay}`);
+            enemyTimeout = setTimeout(() => {
+                domManager.displayComm(tg);
+                setTimeout(() => {
+                  Computer();
+                  boardEngine.setCurrentPlayer(player2.name);
+                  enemyCells.forEach((opp) => {
+                    opp.classList.remove("disabled");
+                  });
+
+                }, 5000 - 3500);
+
+            }, 3500);
+
         }
 
         domManager.cellEvents(cells);
-
 
         function getPlayers(){
             return players;
@@ -186,11 +402,14 @@ function gameWrapper(){
                 if(count <= 5){
                     let cd = [rIndex, cIndex];
                     if(count === 4){
-                            players[0].gameboard.place(cd, shipArr[3], 3);
-                            length--;
-                        }else{
-                            players[0].gameboard.place(cd, shipArr[count - 1], length);
-                            length--;
+                        players[0].gameboard.place(cd, shipArr[3], 3);
+                        domManager.placeShipImage(rIndex, cIndex, 3, table, horizontal[3], "x");
+                        domManager.updateShipName(shipArr[count]);
+                    }else{
+                        players[0].gameboard.place(cd, shipArr[count - 1], length);
+                        domManager.placeShipImage(rIndex, cIndex, length, table, horizontal[count - 1], "x");
+                        domManager.updateShipName(shipArr[count]);
+                        length--;
                     }
                     count++;
                 }else{
@@ -205,7 +424,7 @@ function gameWrapper(){
         // Set Event listeners up for placing ships on the grid (for user)
         domManager.fCellEvents(fCells);
 
-        function plAnalyst(length, axis = 'x'){
+        function plAnalyst(axis = 'x'){
             let x = null, y = null, crd = null;
             let valid = true;
             let grid = players[1].gameboard.getGrid();
@@ -224,15 +443,14 @@ function gameWrapper(){
 
 
             if(axis === 'y'){
-
-                for(let i = 0; i < length; i++){
+                for(let i = 0; i < 5; i++){
                     if(grid[x + i][y] !== 0){
                         valid = false;
                     }
                 }
 
             }else{
-                for(let i = 0; i < length; i++){
+                for(let i = 0; i < 5; i++){
                     if(grid[x][y +  i] !== 0){
                         valid = false;
                     }
@@ -243,7 +461,7 @@ function gameWrapper(){
                 crd = [x, y];
                 return crd;
             }else{
-               return plAnalyst(length, axis);
+               return plAnalyst(axis);
             }
 
         }
@@ -252,30 +470,28 @@ function gameWrapper(){
         function placeShips(){
             let axis = ['x', 'y'];
             let elem = axis[Math.random() < 0.5 ? 0 : 1];
-            let crd = null;
+            let crd = null, x = null, y = null;
             let length = 5;
-
+            let imgArr = elem === 'x' ? [...horizontal] : [...vertical];
             
             for(let i = 0; i < 5; i++){
-                crd = plAnalyst(length, elem);
-                console.log(crd);
-                console.log(elem);
+                crd = plAnalyst(elem);
+                [x, y] = crd;
 
                 try{
                     if(i === 3){
                         players[1].gameboard.place(crd, shipArr[i], 3, elem);
-                        length--;
+                        domManager.placeShipImage(x, y, 3, table2, imgArr[3], elem, true);
                     }else{
                         players[1].gameboard.place(crd, shipArr[i], length, elem);
-                        // console.log(length)
+                        domManager.placeShipImage(x, y, length, table2, imgArr[i], elem, true);
                         length--;
                     }
 
-                    console.log(`len: ${length}`);
                 } catch(error) {
                     domManager.showError(error.message);
                 }
-
+                
             } 
     }
 
@@ -294,67 +510,65 @@ function gameWrapper(){
 
 // Driver Code
 function gameInit(){
-    // let name = domManager.getPlayerName();
+    if(gameInstance){
+        gameInstance = null;
+    }
+
     const playerBoard = document.querySelectorAll(".player-board");
-    
     if(name.value === ""){
         gameInstance.domManager.showError("Player name is required");
     }
     
         gameInstance = gameWrapper();
-        playerBoard[0].textContent = name.value;
-        playerBoard[1].textContent = "Enemy";
+        playerBoard[0].textContent = "Enemy";
+        playerBoard[1].textContent = name.value;
 
         gameInstance.placeEngine.placeShips();
-        gameInstance.boardEngine.setCurrentPlayer(name.value);
+        gameInstance.boardEngine.setCurrentPlayer("Enemy");
+        
+    }
     
-}
+    
+    play.addEventListener("click", () => {
+        const loadPage = document.querySelector("#load-page");
+        const startPage = document.querySelector("#start-page");
+        loadPage.classList.add("hidden");
+        startPage.classList.remove("hidden");
+    });
+    
+    
+    start.addEventListener("click", () => {
+        if(name.value === ""){
+            gameInstance.domManager.showError("Player name is required");
+        }else{
+            gameInstance.domManager.showInfo();
+            let wid = 25.0;
+            const startPage = document.querySelector("#start-page");
+            const mainPage = document.querySelector("#main-page");
+            const playerTable = table.cloneNode(true);
+            const imgs = playerTable.querySelectorAll("img");
 
+            playerTable.classList.remove("first");
+            playerTable.classList.add("player");
+            gameInstance.domManager.displayComm();
+            for(let i = 0; i < 5; i++){
+                let size = parseFloat(imgs[i].style.width);
+                imgs[i].style.width = `${size + wid}px`;
+                if(i === 2) wid = 20;
+                wid -= 5;
+            }
 
-play.addEventListener("click", () => {
-    const loadPage = document.querySelector("#load-page");
-    const startPage = document.querySelector("#start-page");
-    loadPage.classList.add("hidden");
-    startPage.classList.remove("hidden");
-});
-
-
-start.addEventListener("click", () => {
-    const startPage = document.querySelector("#start-page");
-    const mainPage = document.querySelector("#main-page");
-    startPage.classList.add("hidden");
-    mainPage.classList.remove("hidden");
+            const grid = document.querySelector(".p-waters");
+            grid.appendChild(playerTable);
+            startPage.classList.add("hidden");
+            mainPage.classList.remove("hidden");
+    }
     
 });
 
 name.addEventListener("change", gameInit)
 // Effects
-// const typed = document.querySelectorAll(".typed-text");
-// const textArr = [
-//   "Welcome to the Ultimate Naval Battle!.Welcome to the Ultimate Naval Battle!.",
-//   "Prepare to conquer the Sea!."
-// ];
-// let textIndex = 0;
-// let charIndex = 0;
-
-// function typedEffect() {
-// //   if(textIndex < typed.length){
-//     if(charIndex < textArr[textIndex].length){
-//       typed[textIndex].textContent += textArr[textIndex].charAt(charIndex);
-//       charIndex++;
-
-//       setTimeout(typedEffect, 200);
-//     }
-//     // else{
-//     //   textIndex++;
-//     //   charIndex = 0;
-//     //   setTimeout(typedEffect, 200); // Move to next text after finishing current one
-//     // }
-// //   }
-// }
-
 const typed = document.querySelectorAll(".typed-text");
-console.log(typed);
 const textArr = [
   "Welcome to the Ultimate Naval Battle!.",
   "Prepare to conquer the Sea!"
@@ -386,7 +600,6 @@ function typedEffect() {
 // Start typing the first text
 typedEffect();
 
-// typedEffect();
 
 
 
