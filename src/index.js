@@ -1,4 +1,5 @@
 import { celebro, Player } from "./battleship";
+import AudioManager from "./audio";
 import { horizontal, vertical } from "./images.js";
 import "@fortawesome/fontawesome-free/css/all.css";
 import './styles.css';
