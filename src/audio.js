@@ -14,10 +14,16 @@ class AudioManager{
     }
 
     playSound(name){
-        this.lowerThemeVolume();
+        if(name === "click"){
+            this.sounds.theme.volume = 0;
+        }else{
+            this.lowerThemeVolume();
+        }
+        
         this.sounds[name].currentTime = 0;
         this.sounds[name].volume = this.effectVolume;
         this.sounds[name].play();
+
 
         this.sounds[name].onended = () => {
             this.restoreThemeVolume();
