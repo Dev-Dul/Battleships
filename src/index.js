@@ -10,6 +10,8 @@ const table2 = document.querySelector("table.enemy");
 const start = document.getElementById("start");
 const play = document.getElementById("play");
 const name = document.getElementById("name");
+const audioManager = new AudioManager();
+
 
 let gameInstance = null;
 
@@ -344,7 +346,6 @@ function gameWrapper(){
             clearTimeout(enemyTimeout);
             
             let current = boardEngine.getCurrentPlayer();
-            console.log(current);
             parent = elem.closest("table");
             enemyCells = parent.querySelectorAll("td");
 
@@ -354,6 +355,7 @@ function gameWrapper(){
 
             awayTimeout = setTimeout(() => {
                 play(player2, rIndex, cIndex, table2);
+                audioManager.playSound("explosion");
                 boardEngine.setCurrentPlayer(player1.name);
             }, delay);
 
@@ -367,6 +369,7 @@ function gameWrapper(){
                 domManager.displayComm(tg);
                 setTimeout(() => {
                   Computer();
+                  audioManager.playSound("afar");
                   boardEngine.setCurrentPlayer(player2.name);
                   enemyCells.forEach((opp) => {
                     opp.classList.remove("disabled");
@@ -531,6 +534,7 @@ function gameInit(){
     
     
     play.addEventListener("click", () => {
+        audioManager.startTheme();
         const loadPage = document.querySelector("#load-page");
         const startPage = document.querySelector("#start-page");
         loadPage.classList.add("hidden");
@@ -539,6 +543,7 @@ function gameInit(){
     
     
     start.addEventListener("click", () => {
+        audioManager.playSound("click");
         if(name.value === ""){
             gameInstance.domManager.showError("Player name is required");
         }else{
@@ -569,37 +574,42 @@ function gameInit(){
 
 name.addEventListener("change", gameInit)
 // Effects
-const typed = document.querySelectorAll(".typed-text");
-const textArr = [
-  "Welcome to the Ultimate Naval Battle!.",
-  "Prepare to conquer the Sea!"
-];
-let textIndex = 0;  // This will track the current text in textArr
-let charIndex = 0;  // This will track the current character in the current text
 
-function typedEffect() {
-  if (textIndex < typed.length) {
-    if (charIndex < textArr[textIndex].length) {
-      // Append the character to the corresponding element
-      typed[textIndex].textContent += textArr[textIndex].charAt(charIndex);
-      charIndex++;
+window.addEventListener("DOMContentLoaded", () => {
 
-      // Keep typing the next character after 200ms
-      setTimeout(typedEffect, 50);
-    } else {
-      // Move to the next text in the array once current one is done
-      textIndex++;
-      charIndex = 0;  // Reset charIndex for the next text
+    const typed = document.querySelectorAll(".typed-text");
+    const textArr = [
+      "Welcome to the Ultimate Naval Battle!.",
+      "Prepare to conquer the Sea!"
+    ];
+    let textIndex = 0;  // This will track the current text in textArr
+    let charIndex = 0;  // This will track the current character in the current text
+    
+    function typedEffect() {
       if (textIndex < typed.length) {
-        // Only start the next text typing if there's another element to type into
-        setTimeout(typedEffect, 50);
+        if (charIndex < textArr[textIndex].length) {
+          // Append the character to the corresponding element
+          typed[textIndex].textContent += textArr[textIndex].charAt(charIndex);
+          charIndex++;
+    
+          // Keep typing the next character after 200ms
+          setTimeout(typedEffect, 50);
+        } else {
+          // Move to the next text in the array once current one is done
+          textIndex++;
+          charIndex = 0;  // Reset charIndex for the next text
+          if (textIndex < typed.length) {
+            // Only start the next text typing if there's another element to type into
+            setTimeout(typedEffect, 50);
+          }
+        }
       }
     }
-  }
-}
+    
+    // Start typing the first text
+    typedEffect();
+});
 
-// Start typing the first text
-typedEffect();
 
 
 
