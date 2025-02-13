@@ -63,7 +63,11 @@ function gameWrapper(){
                 mute.classList.add("fa-volume-mute");
                 audioManager.unmute();
             }
-        })
+        });
+
+        help.addEventListener("click", () => {
+            showInfo(true);
+        });
 
         function displayComm(text = "Waiting For Your Orders Admiral!.") {
           // If there's an ongoing interval, clear it.
@@ -120,9 +124,11 @@ function gameWrapper(){
             cell.appendChild(span);
         }
 
-        function showInfo(){
+        function showInfo(hello = false){
             let charIndex = 0;
-            let welcome = "Welcome aboard Admiral.\nIncoming enemy fleet detected. They are employing advanced tactical manuevers and utilizing cloaking technology. Estimated time of Arrival: 2Minutes. We advise immediate readiness for evasive action and countermeasures. "
+            let textOne = "Hello Admiral.\nClick on a cell on the Enemy territory to attack it. Enemy is using cloaking technology, their ships appear only after they've been sunk. We will need your univaled war strategy and vast experience to defeat them.";
+            let textTwo = "Welcome aboard Admiral.\nIncoming enemy fleet detected. They are employing advanced tactical manuevers and utilizing cloaking technology. Estimated time of Arrival: 2Minutes. We advise immediate readiness for evasive action and countermeasures. "
+            let welcome = hello ? textOne : textTwo;
             let text = info.querySelector(".main-text p");
             ovl.classList.add("active");
 
