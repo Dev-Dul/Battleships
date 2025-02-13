@@ -31,11 +31,16 @@ function gameWrapper(){
         const counts = document.querySelectorAll(".hit-count");
         const ovl = document.querySelector(".ovl");
         const info = document.querySelector(".info");
-        const mute = document.querySelector(".inner fa-volume-mute");
-        const help = document.querySelector(".inner fa-info-circle");
+        const mute = document.querySelector(".inner .fa-volume-mute");
+        const help = document.querySelector(".inner .fa-info-circle");
 
 
-        settings.addEventListener("click", () => {
+        inner.addEventListener("click", (event) => {
+          event.stopPropagation();
+        });
+
+        settings.addEventListener("click", (event) => {
+            event.stopPropagation();
             if(inner.classList.contains("active")){
                 inner.classList.remove("active");
                 settings.classList.remove("shade");
@@ -53,7 +58,8 @@ function gameWrapper(){
             window.location.reload();
         });
 
-        mute.addEventListener("click", () => {
+        mute.addEventListener("click", (event) => {
+            event.stopPropagation();
             if(mute.classList.contains("fa-volume-mute")){
                 mute.classList.remove("fa-volume-mute");
                 mute.classList.add("fa-volume-up");
@@ -65,7 +71,8 @@ function gameWrapper(){
             }
         });
 
-        help.addEventListener("click", () => {
+        help.addEventListener("click", (event) => {
+            event.stopPropagation();
             showInfo(true);
         });
 
@@ -126,10 +133,11 @@ function gameWrapper(){
 
         function showInfo(hello = false){
             let charIndex = 0;
-            let textOne = "Hello Admiral.\nClick on a cell on the Enemy territory to attack it. Enemy is using cloaking technology, their ships appear only after they've been sunk. We will need your univaled war strategy and vast experience to defeat them.";
-            let textTwo = "Welcome aboard Admiral.\nIncoming enemy fleet detected. They are employing advanced tactical manuevers and utilizing cloaking technology. Estimated time of Arrival: 2Minutes. We advise immediate readiness for evasive action and countermeasures. "
-            let welcome = hello ? textOne : textTwo;
             let text = info.querySelector(".main-text p");
+            let textOne = "Hello Admiral.\nClick on a cell on the Enemy territory to attack it. Enemy is using cloaking technology, their ships appear only after they've been sunk. We will need your univaled war strategy and vast experience to defeat them.";
+            let textTwo = "Welcome aboard Admiral.\nIncoming enemy fleet detected. They are employing advanced tactical manuevers and utilizing cloaking technology. Estimated time of Arrival: 2Minutes. We advise immediate readiness for evasive action and countermeasures. ";
+            if(hello) text.textContent = '';
+            let welcome = hello ? textOne : textTwo;
             ovl.classList.add("active");
 
             if(text.intervalId){
@@ -145,12 +153,12 @@ function gameWrapper(){
                     charIndex++;
                   }else{
                     setTimeout(() => {
-                        showError("If You're On Mobile, Rotate Your Phone For A Better Experience.")
+                        if(welcome === textTwo) showError("Rotate Your Phone For A Better Experience.");
                         info.classList.remove("active");
                         ovl.classList.remove("active");
                         clearInterval(interval);
                         text.intervalId = null;
-                    }, 2500);
+                    }, 1200);
                   }
                 }, 60);
 
@@ -243,7 +251,7 @@ function gameWrapper(){
             winner.parentElement.classList.add("active");
         }
 
-        return { updateCell, showError, getPlayerName, fCellEvents, cellEvents, getCoordinates, announceWinner, placeShipImage, updateShipName, displayComm, flick, showInfo };
+        return { updateCell, showError, getPlayerName, fCellEvents, cellEvents, getCoordinates, announceWinner, placeShipImage, updateShipName, displayComm, showInfo };
     })();
 
     // This module handles board logic like fetching current player, checking whether an attack is valid or if the attack hits the ship
@@ -552,9 +560,7 @@ function gameInit(){
     
     
     start.addEventListener("click", () => {
-        const duration = audioManager.getDuration("click");
         audioManager.playSound("click");
-        console.log(duration);
 
         setTimeout(() => {
             if(name.value === ""){

@@ -52,10 +52,17 @@ class AudioManager{
 
     mute(){
         this.isMute = true;
-        for(sound in this.sounds){
-            sound.volume = 0;
-            sound.pause();
-        }
+        let keys = Object.keys(this.sounds);
+        console.log(keys);
+        keys.forEach(key => {
+            // this.sounds[key].volume = 0;
+            this.sounds[key].pause();
+        });
+        // focus(let i = 0; i < )
+        // for(snd in this.sounds){
+        //     snd.volume = 0;
+        //     snd.pause();
+        // }
     }
 
     unmute(){

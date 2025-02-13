@@ -266,8 +266,9 @@ p.tip{
     align-items: center;
     justify-content: space-between;
     border: 1px solid;
-    transition: all 2s ease;
     opacity: 0;
+    padding: 2px;
+    transition: all 2s ease;
 }
 
 .inner.active{
@@ -588,4 +589,5 @@ path.two {
     .settings{
         top: 80px
     }
+   
 }
