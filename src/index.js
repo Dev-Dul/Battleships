@@ -55,8 +55,12 @@ function gameWrapper(){
 
         mute.addEventListener("click", () => {
             if(mute.classList.contains("fa-volume-mute")){
+                mute.classList.remove("fa-volume-mute");
+                mute.classList.add("fa-volume-up");
                 audioManager.mute();
             }else{
+                mute.classList.remove("fa-volume-up");
+                mute.classList.add("fa-volume-mute");
                 audioManager.unmute();
             }
         })

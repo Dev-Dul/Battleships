@@ -54,10 +54,12 @@ class AudioManager{
         this.isMute = true;
         for(sound in this.sounds){
             sound.volume = 0;
+            sound.pause();
         }
     }
 
     unmute(){
+        this.startTheme();
         this.isMute = false;
     }
 }
