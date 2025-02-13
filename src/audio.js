@@ -11,23 +11,31 @@ class AudioManager{
         this.effectVolume = 1.0;
         this.themeLowVolume = 0.5;
         this.maxVolume = 1.0;
+        this.isMute = false;
     }
 
     playSound(name){
-        if(name === "click"){
-            this.sounds.theme.volume = 0;
+
+        if(this.isMute){
+           this.mute();
         }else{
-            this.lowerThemeVolume();
+
+            if(name === "click"){
+              this.sounds.theme.volume = 0;
+            }else{
+              this.lowerThemeVolume();
+            }
+
+            this.sounds[name].currentTime = 0;
+            this.sounds[name].volume = this.effectVolume;
+            this.sounds[name].play();
+    
+    
+            this.sounds[name].onended = () => {
+                this.restoreThemeVolume();
+            }
         }
         
-        this.sounds[name].currentTime = 0;
-        this.sounds[name].volume = this.effectVolume;
-        this.sounds[name].play();
-
-
-        this.sounds[name].onended = () => {
-            this.restoreThemeVolume();
-        }
     }
 
     lowerThemeVolume(){
@@ -42,8 +50,15 @@ class AudioManager{
         this.sounds.theme.play();
     }
 
-    getDuration(name){
-        return this.sounds[name].duration;
+    mute(){
+        this.isMute = true;
+        for(sound in this.sounds){
+            sound.volume = 0;
+        }
+    }
+
+    unmute(){
+        this.isMute = false;
     }
 }
 

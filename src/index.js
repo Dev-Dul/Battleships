@@ -31,6 +31,8 @@ function gameWrapper(){
         const counts = document.querySelectorAll(".hit-count");
         const ovl = document.querySelector(".ovl");
         const info = document.querySelector(".info");
+        const mute = document.querySelector(".inner fa-volume-mute");
+        const help = document.querySelector(".inner fa-info-circle");
 
 
         settings.addEventListener("click", () => {
@@ -50,6 +52,14 @@ function gameWrapper(){
         reset.addEventListener("click", () => {
             window.location.reload();
         });
+
+        mute.addEventListener("click", () => {
+            if(mute.classList.contains("fa-volume-mute")){
+                audioManager.mute();
+            }else{
+                audioManager.unmute();
+            }
+        })
 
         function displayComm(text = "Waiting For Your Orders Admiral!.") {
           // If there's an ongoing interval, clear it.
@@ -205,18 +215,6 @@ function gameWrapper(){
             oppCells.forEach((cell) => {
                 cell.addEventListener("click", () => callback(cell));
             });
-        }
-
-        function flick(stat = 'on'){
-            if(stat === 'off'){
-                oppCells.forEach((cell) => {
-                    cell.classList.add("disabled");
-                });
-            }else{
-                oppCells.forEach((cell) => {
-                  cell.classList.remove("disabled");
-                });
-            }
         }
 
 
