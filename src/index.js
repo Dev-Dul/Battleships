@@ -178,7 +178,7 @@ function gameWrapper(){
             setTimeout(() => {
                 shipName.textContent = ship;
                 shipName.classList.remove("levitate");
-            }, 500);
+            }, 250);
             
             counter++;
         }

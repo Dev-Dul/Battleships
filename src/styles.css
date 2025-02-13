@@ -591,3 +591,19 @@ path.two {
     }
    
 }
+
+/* Styles for phones in lamdscape mode */
+@media screen and (max-width: 900px) and (orientation: landscape){
+    .start-page, .main-page{
+        overflow: scroll;
+    }
+
+    .hits{
+        position: fixed;
+    }
+}
+
+/* @media (min-width: 900px) and (orientation: landscape){
+    
+    
+} */
