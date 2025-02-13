@@ -158,7 +158,7 @@ function gameWrapper(){
                         ovl.classList.remove("active");
                         clearInterval(interval);
                         text.intervalId = null;
-                    }, 1200);
+                    }, 1300);
                   }
                 }, 60);
 
