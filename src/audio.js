@@ -41,6 +41,10 @@ class AudioManager{
     startTheme(){
         this.sounds.theme.play();
     }
+
+    getDuration(name){
+        return this.sounds[name].duration;
+    }
 }
 
 export default AudioManager;

@@ -4,11 +4,6 @@
 }
 
 @font-face {
-    font-family: "Orbitron";
-    src: url("../Assets/Fonts/Orbitron-VariableFont_wght.ttf");
-}
-
-@font-face {
     font-family: "Dune";
     src: url("../Assets/Fonts/Dune_Rise.otf");
 }
@@ -100,6 +95,7 @@ td > span{
     align-items: center;
     justify-content: space-around;
     transition: all 1s ease;
+    overflow: hidden;
 }
 
 /* Load Page Styles */
@@ -107,6 +103,18 @@ td > span{
     font-size: 3.5rem;
     font-family: "Mars";
     text-transform: uppercase;
+    opacity: 0;
+    animation: slide 2s ease 2s both;
+}
+
+@keyframes slide {
+    from{
+        opacity: 0;
+        transform: translateY(50px);
+    }to{
+        opacity: 1;
+        transform: translate(0);
+    }
 }
 
 .load-page h2, .load-page p{
@@ -401,7 +409,6 @@ p.tip{
 
 .main-text p{
     color: white;
-    font-family: "Orbitron";
     font-size: 1rem;
     white-space: pre-line;
 }

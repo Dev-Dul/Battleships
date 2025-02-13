@@ -521,7 +521,7 @@ function gameInit(){
     const playerBoard = document.querySelectorAll(".player-board");
     if(name.value === ""){
         gameInstance.domManager.showError("Player name is required");
-    }
+    }else{
     
         gameInstance = gameWrapper();
         playerBoard[0].textContent = "Enemy";
@@ -531,6 +531,7 @@ function gameInit(){
         gameInstance.boardEngine.setCurrentPlayer("Enemy");
         
     }
+}
     
     
     play.addEventListener("click", () => {
@@ -543,34 +544,42 @@ function gameInit(){
     
     
     start.addEventListener("click", () => {
+        const duration = audioManager.getDuration("click");
         audioManager.playSound("click");
-        if(name.value === ""){
-            gameInstance.domManager.showError("Player name is required");
-        }else{
-            gameInstance.domManager.showInfo();
-            let wid = 25.0;
-            const startPage = document.querySelector("#start-page");
-            const mainPage = document.querySelector("#main-page");
-            const playerTable = table.cloneNode(true);
-            const imgs = playerTable.querySelectorAll("img");
+        console.log(duration);
 
-            playerTable.classList.remove("first");
-            playerTable.classList.add("player");
-            gameInstance.domManager.displayComm();
-            for(let i = 0; i < 5; i++){
-                let size = parseFloat(imgs[i].style.width);
-                imgs[i].style.width = `${size + wid}px`;
-                if(i === 2) wid = 20;
-                wid -= 5;
+        setTimeout(() => {
+            if(name.value === ""){
+                gameInstance.domManager.showError("Player name is required");
+            }else{
+                gameInstance.domManager.showInfo();
+                let wid = 25.0;
+                const startPage = document.querySelector("#start-page");
+                const mainPage = document.querySelector("#main-page");
+                const playerTable = table.cloneNode(true);
+                const imgs = playerTable.querySelectorAll("img");
+    
+                playerTable.classList.remove("first");
+                playerTable.classList.add("player");
+                gameInstance.domManager.displayComm();
+                
+                for(let i = 0; i < 5; i++){
+                    let size = parseFloat(imgs[i].style.width);
+                    imgs[i].style.width = `${size + wid}px`;
+                    if(i === 2) wid = 20;
+                    wid -= 5;
+                }
+    
+                const grid = document.querySelector(".p-waters");
+                grid.appendChild(playerTable);
+                startPage.classList.add("hidden");
+                mainPage.classList.remove("hidden");
             }
 
-            const grid = document.querySelector(".p-waters");
-            grid.appendChild(playerTable);
-            startPage.classList.add("hidden");
-            mainPage.classList.remove("hidden");
-    }
+        }, 100);
+    });
     
-});
+
 
 name.addEventListener("change", gameInit)
 // Effects
