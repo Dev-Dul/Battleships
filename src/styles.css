@@ -36,9 +36,10 @@ body > div{
 .error{
     height: 3rem;
     width: 80%;
-    margin: 0 auto;
     top: 20px;
-    left: 60px;
+    left: 0;
+    right: 0;
+    margin: auto;
     text-align: center;
     display: flex;
     align-items: center;
@@ -100,11 +101,11 @@ td > span{
 
 /* Load Page Styles */
 .load-page h2{
-    font-size: 3.5rem;
+    font-size: clamp(1.7rem, calc(3vw + 1rem), 5rem);
     font-family: "Mars";
     text-transform: uppercase;
     opacity: 0;
-    animation: slide 2s ease 2s both;
+    animation: slide 2s ease 1s both;
 }
 
 @keyframes slide {
@@ -163,7 +164,7 @@ td > span{
 /* Start-Page styles */
 
 h1{
-    font-size: 3.5rem;
+    font-size: clamp(1.7rem, calc(3vw + 1rem), 5rem);
     margin-bottom: 0;
     font-family: "Dune";
     text-transform: uppercase;
@@ -459,6 +460,7 @@ span.hit{
 .wrapper#start{
     opacity: 0;
     transition: all 1s ease;
+    margin-top: -3.5rem;
     transform: translateY(100vh);
 }
 
@@ -565,4 +567,26 @@ path.two {
 
 .footer p{
     margin-top: 2px;
+}
+
+/* Responsiveness */
+
+@media screen and (max-width: 468px) {
+    .main-page{
+        overflow-y: auto; 
+        /* overflow-x: hidden;       */
+    }
+
+    .waters{
+        flex-direction: column;
+    }
+
+    .waters table{
+        height: 330px;
+        width: 330px;
+    }
+
+    .settings{
+        top: 80px
+    }
 }
