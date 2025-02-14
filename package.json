@@ -8,7 +8,6 @@
     "test": "jest --coverage",
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack --config webpack.dev.js",
-    "predeploy": "git add dist -f && git commit -m 'Cleanup and Deployment commit'",
     "deploy": "git subtree push --prefix dist origin gh-pages"
   },
   "repository": {
