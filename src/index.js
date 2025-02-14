@@ -199,8 +199,8 @@ function gameWrapper(){
 
             // Set size based on axis
             const size = cell.getBoundingClientRect().width;
-            img.style.width = axis === 'x' ? `${size * length}px` : `${size}px`;
-            img.style.height = axis === 'x' ? `${size - 5}px` : `${(size - 5) * length}px`;
+            img.style.width = axis === 'x' ? `${(size - 5) * length}px` : `${size - 5}px`;
+            img.style.height = axis === 'x' ? `${size}px` : `${size * length}px`;
 
             cell.appendChild(img);
 
@@ -326,7 +326,8 @@ function gameWrapper(){
                 }
 
             }else{
-                domManager.showError("Invalid Move");
+                let nt = domManager.getCurrentPlayer();
+                domManager.showError(`Invalid Move!. ${nt} Should Play.`);
             }
 
             if(player.name === 'Enemy' && boardEngine.shipHit(player, rIndex, cIndex)){

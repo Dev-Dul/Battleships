@@ -96,11 +96,13 @@ td > span{
 
 .start-page{
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("../Assets/Bg/four.jpg") center / cover;
+    background-attachment: fixed;
     background-repeat: no-repeat;
 }
 
 .main-page{
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("../Assets/Bg/six.jpg") center / cover;
+    background-attachment: fixed;
     background-repeat: no-repeat;
 }
 
@@ -285,7 +287,7 @@ p.tip{
     position: absolute;
     bottom: 0;
     left: 0;
-    top: 20px;
+    top: 40px;
     height: 40px;
     width: 100%;
     display: flex;
@@ -314,7 +316,6 @@ p.tip{
 
 
 .main-page{
-    /* color: #0466c8; */
     overflow-x: hidden;
 }
 
@@ -348,7 +349,7 @@ p.tip{
     text-align: center;
     background: #0466c8;
     border: 2px solid #0466c8;
-    transition: all 2s ease;
+    transition: all 3s ease;
 }
 
 .txt.active{
@@ -381,7 +382,6 @@ p.tip{
     border: none;
     outline: none;
     border-radius: 10px;
-    opacity: 0;
     transition: all 1s ease;
 }
 
@@ -487,7 +487,7 @@ td span{
     width: 50%;
     height: 50%;
     z-index: 10;
-    background: black;
+    background: white;
     border-radius: 50%;
     position: absolute;
 }
@@ -643,6 +643,29 @@ path.two {
     .info{
         width: 100%;
         height: 40%;
+    }
+
+    .main-text{
+        margin-left: 1.35rem;
+    }
+
+    /* .load-page{
+        background: url("../Assets/Bg/bg-one.jpg");
+        background-size: auto 120%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-position: 100px cen?ter;
+        background-attachment: fixed;
+    } */
+
+    
+
+    .start-page{
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("../Assets/Bg/mobile.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
     }
 
     /* .info > div{

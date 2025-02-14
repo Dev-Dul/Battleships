@@ -14,14 +14,14 @@ module.exports = {
     },
 
     devtool: "eval-source-map",
-    devServer: {
-        contentBase: './dist',
-        hot: true,
-        open: true,
-        port: 8080,
-        watchFiles: ["./src/template.html"],
-        watchContentBase: true,
-    },
+    // devServer: {
+    //     contentBase: './dist',
+    //     hot: true,
+    //     open: true,
+    //     port: 8080,
+    //     watchFiles: ["./src/template.html"],
+    //     watchContentBase: true,
+    // },
 
     plugins: [
         new HtmlWebpackPlugin({
@@ -48,6 +48,11 @@ module.exports = {
 
             {
                 test: /\.(mp4|webm|ogg|avi)$/i,
+                type: "asset/resource",
+            },
+
+            {
+                test: /\.(woff2?|eot|ttf|otf)$/i,
                 type: "asset/resource",
             },
         ],
