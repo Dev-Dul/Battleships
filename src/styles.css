@@ -23,6 +23,7 @@ body{
     padding: 0;
     min-height: 100vh;
     width: 100%;
+    color: linen;
     position: relative;
     font-family: "Genos";
 }
@@ -43,28 +44,17 @@ body > div{
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid;
     padding: 0 30px;
     z-index: 100;
+    background: #0466c8;
     box-sizing: border-box;
     border-radius: 15px;
     transition: all 0.5s ease;
-    background: white;
     transform: translateY(-100vh);
 }
 
 .error.active{
     transform: translate(0);
-}
-
-.error .close{
-    position: absolute;
-    right: 30px;
-    top: 15px;
-    width: 20px;
-    height: 20px;
-    border: 1px solid red;
-    border-radius: 5px;
 }
 
 .hidden{
@@ -75,6 +65,7 @@ body > div{
 
 table, tr, td{
     border: 1px solid;
+    border-color: #0466c8;
 }
 
 table tr, td{
@@ -98,12 +89,28 @@ td > span{
     overflow: hidden;
 }
 
+.load-page{
+    background: url("../Assets/Bg/bg-one.jpg") center / cover;
+    background-repeat: no-repeat;
+}
+
+.start-page{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("../Assets/Bg/four.jpg") center / cover;
+    background-repeat: no-repeat;
+}
+
+.main-page{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("../Assets/Bg/six.jpg") center / cover;
+    background-repeat: no-repeat;
+}
+
 /* Load Page Styles */
 .load-page h2{
     font-size: clamp(1.7rem, calc(3vw + 1rem), 5rem);
     font-family: "Mars";
     text-transform: uppercase;
     opacity: 0;
+    color: #0466c8;
     animation: slide 2s ease 1s both;
 }
 
@@ -163,18 +170,31 @@ td > span{
 /* Start-Page styles */
 
 h1{
+    color: #0466c8;
     font-size: clamp(1.7rem, calc(3vw + 1rem), 5rem);
     margin-bottom: 0;
     font-family: "Dune";
     text-transform: uppercase;
 }
 
+div.name{
+    color: white;
+}
+
 input[name="name"]{
     height: 3rem;
     width: 10rem;
     padding: 0 5px;
+    outline: none;
+    color: #0466c8;
+    font-family: "EXodar";
+    border-width: 1px;
     text-align: center;
     text-transform: uppercase;
+}
+
+input[name='name']::placeholder{
+    color: #0466c8;
 }
 
 .place p{
@@ -213,6 +233,7 @@ table{
 table.first{
     width: 300px;
     height: 300px;
+    border-color: #0466c8;
 }
 
 p.tip{
@@ -231,6 +252,10 @@ p.tip{
     justify-content: space-around;
 }
 
+.hits p:nth-child(1){
+    color: #0466c8;
+}
+
 .hits p{
     margin: 0;
     font-size: 1.5rem;
@@ -244,6 +269,8 @@ p.tip{
     height: 20px;
     width: 20px;
     display: flex;
+    cursor: pointer;
+    color: #0466c8;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
@@ -278,15 +305,16 @@ p.tip{
 .deck{
     height: 3rem;
     width: 60%;
-    border: 1px solid;
     margin: 0 auto;
     padding: 10px;
     text-align: center;
     border-radius: 25px;
+    border: 1px solid #0466c8;
 }
 
 
 .main-page{
+    /* color: #0466c8; */
     overflow-x: hidden;
 }
 
@@ -318,7 +346,8 @@ p.tip{
     scale: 3;
     opacity: 0;
     text-align: center;
-    border: 2px solid red;
+    background: #0466c8;
+    border: 2px solid #0466c8;
     transition: all 2s ease;
 }
 
@@ -400,12 +429,12 @@ p.tip{
 .main-text{
     height: 45%;
     width: 100%;
-    border: 3px solid red;
-    border-radius: 15px;
     padding: 10px;
     margin-top: 5rem;
     overflow: scroll;
+    border-radius: 15px;
     scrollbar-width: none;
+    background: #0466c8;
 }
 
 .main-text p{
@@ -463,6 +492,10 @@ td span{
     position: absolute;
 }
 
+td img{
+    z-index: 5;
+}
+
 span.hit{
     background: red;
 }
@@ -495,7 +528,7 @@ span.hit{
     font-family: 'Exodar';
     font-size: 1.5rem;
     color: white;
-    background: #6225E6;
+    background: #0466c8;
     transition: 1s;
     box-shadow: 6px 6px 0 black;
     transform: skewX(-15deg);
