@@ -1,6 +1,7 @@
 #IDE/Editor files
 .vscode/
 node_modules
+coverage
 dist
 
 #SYSTEM FILES

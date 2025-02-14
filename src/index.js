@@ -199,7 +199,7 @@ function gameWrapper(){
 
             // Set size based on axis
             const size = cell.getBoundingClientRect().width;
-            img.style.width = axis === 'x' ? `${(size - 5) * length}px` : `${size - 5}px`;
+            img.style.width = axis === 'x' ? `${size * length}px` : `${size}px`;
             img.style.height = axis === 'x' ? `${size}px` : `${size * length}px`;
 
             cell.appendChild(img);
@@ -260,7 +260,7 @@ function gameWrapper(){
         let currentPlayer = null;
 
         function setCurrentPlayer(user){
-            currentPlayer = user === name.value ? "Enemy" : name.value;
+            currentPlayer = user;
         }
         
         function getCurrentPlayer(){
@@ -326,7 +326,7 @@ function gameWrapper(){
                 }
 
             }else{
-                let nt = domManager.getCurrentPlayer();
+                let nt = boardEngine.getCurrentPlayer();
                 domManager.showError(`Invalid Move!. ${nt} Should Play.`);
             }
 
@@ -346,12 +346,14 @@ function gameWrapper(){
             let a = 0, b = 0;
             if(lastMove !== null){
                 let [x, y] = lastMove;
-                [a, b] =  player1.gameboard.receiveAttack(x, y) ? celebro(lastMove, player2) : celebro(null, player2);
+                [a, b] =  player1.gameboard.receiveAttack(x, y) ? celebro(lastMove, player1) : celebro(null, player1);
+                console.log([a, b]);
                 play(player1, a, b, document.querySelector("table.player"));
 
             }else{
 
-                [a, b] = celebro(null, player2);
+                [a, b] = celebro(null, player1);
+                console.log([a, b]);
                 play(player1, a, b, document.querySelector("table.player"));
             }
 
@@ -451,13 +453,13 @@ function gameWrapper(){
             let grid = players[1].gameboard.getGrid();
 
             if(axis === 'y'){
-                y = Math.floor(Math.random() * 6);
+                y = Math.floor(Math.random() * 10);
             }else{
                 x = Math.floor(Math.random() * 6);
             }
 
             if(x === null){
-                x = Math.floor(Math.random() * 6);
+                x = Math.floor(Math.random() * 10);
             }else{
                 y = Math.floor(Math.random() * 6);
             } 
@@ -545,7 +547,7 @@ function gameInit(){
         playerBoard[1].textContent = name.value;
 
         gameInstance.placeEngine.placeShips();
-        gameInstance.boardEngine.setCurrentPlayer("Enemy");
+        gameInstance.boardEngine.setCurrentPlayer(name.value);
         
     }
 }

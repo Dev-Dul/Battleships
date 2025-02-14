@@ -181,7 +181,6 @@ class GameBoard{
         let sunk = false;
         let theCoords = [] ;
         for(const ship of this.ships){
-            console.log(ship);
             const occupiedCells = this.getCells(ship);
 
             for(const cell of occupiedCells){
@@ -189,9 +188,6 @@ class GameBoard{
                     if(ship.isSunk()){
                         theCoords = ship.crd;
                         sunk = true;
-                        console.log(this.getHits());
-                        console.log(ship.length);
-                        console.log(ship.hit);
                         break;
                     }
                 }
