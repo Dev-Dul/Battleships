@@ -1,10 +1,15 @@
+import themeAudio from "../Assets/Sounds/main-theme.mp3";
+import clickAud from "../Assets/Sounds/click.mp3";
+import explosionAud from "../Assets/Sounds/explosion-hit.wav";
+import afar from "../Assets/Sounds/explosion-afar.wav";
+
 class AudioManager{
     constructor(){
         this.sounds = {
-            theme: new Audio("../Assets/Sounds/main-theme.mp3"),
-            click: new Audio("../Assets/Sounds/click.mp3"),
-            explosion: new Audio("../Assets/Sounds/explosion-hit.wav"),
-            afar: new Audio("../Assets/Sounds/explosion-afar.wav")
+            theme: new Audio(themeAudio),
+            click: new Audio(clickAud),
+            explosion: new Audio(explosionAud),
+            afar: new Audio(afar)
         };
 
         this.sounds.theme.loop = true;

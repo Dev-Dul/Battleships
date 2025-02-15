@@ -649,16 +649,9 @@ path.two {
         margin-left: 1.35rem;
     }
 
-    /* .load-page{
-        background: url("../Assets/Bg/bg-one.jpg");
-        background-size: auto 120%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-position: 100px cen?ter;
-        background-attachment: fixed;
-    } */
-
-    
+    .load-page h2{
+        font-size: 2rem;
+    }
 
     .start-page{
         background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("../Assets/Bg/mobile.jpg");
@@ -669,9 +662,6 @@ path.two {
         background-repeat: no-repeat;
     }
 
-    /* .info > div{
-        width: 100%;
-    } */
    
 }
 
