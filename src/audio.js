@@ -1,4 +1,4 @@
-import themeAudio from "../Assets/Sounds/main-theme.mp3";
+import themeAud from "../Assets/Sounds/main-theme.mp3";
 import clickAud from "../Assets/Sounds/click.mp3";
 import explosionAud from "../Assets/Sounds/explosion-hit.wav";
 import afar from "../Assets/Sounds/explosion-afar.wav";
@@ -6,7 +6,7 @@ import afar from "../Assets/Sounds/explosion-afar.wav";
 class AudioManager{
     constructor(){
         this.sounds = {
-            theme: new Audio(themeAudio),
+            theme: new Audio(themeAud),
             click: new Audio(clickAud),
             explosion: new Audio(explosionAud),
             afar: new Audio(afar)
