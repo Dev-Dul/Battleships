@@ -601,6 +601,11 @@ function gameInit(){
 name.addEventListener("change", gameInit)
 // Effects
 
+window.onload = function(){
+    document.body.classList.add("active");
+    document.querySelector(".ld").classList.remove("active");
+}
+
 window.addEventListener("DOMContentLoaded", () => {
 
     const typed = document.querySelectorAll(".typed-text");

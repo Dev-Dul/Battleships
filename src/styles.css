@@ -26,12 +26,74 @@ body{
     color: linen;
     position: relative;
     font-family: "Genos";
+    opacity: 0;
+    visibility: 0;
+}
+
+body.active{
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Global styles */
 body > div{
     position: absolute;
 }
+
+.ld{
+    height: 100vh;
+    width: 100%;
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5)), url("../Assets/Bg/bg-one.jpg") center / cover;
+    background-repeat: no-repeat;
+    transition: all 1s ease;
+}
+
+.ld.active{
+    display: flex;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #FFF;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after,
+.loader::before {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #0466c8;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.loader::before {
+  left: auto;
+  top: auto;
+  right: 0;
+  bottom: 0;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
 
 .error{
     height: 3rem;
@@ -650,7 +712,11 @@ path.two {
     }
 
     .load-page h2{
-        font-size: 2rem;
+        font-size: 1.65rem;
+    }
+
+    .main p{
+        font-size: 1.3rem;
     }
 
     .start-page{
@@ -660,6 +726,14 @@ path.two {
         background-position: center;
         background-attachment: fixed;
         background-repeat: no-repeat;
+    }
+
+    .wrapper{
+        margin-top: -4.5rem;
+    }
+
+    .place{
+        margin-top: -3rem;
     }
 
    
