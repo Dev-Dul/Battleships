@@ -1,8 +1,8 @@
+import './styles.css';
 import { celebro, Player } from "./battleship.js";
 import AudioManager from "./audio.js";
 import { horizontal, vertical } from "./images.js";
 import "@fortawesome/fontawesome-free/css/all.css";
-import './styles.css';
 
 
 const table = document.querySelector("table.first");
@@ -602,7 +602,7 @@ name.addEventListener("change", gameInit)
 // Effects
 
 window.onload = function(){
-    document.body.classList.add("active");
+    document.querySelector("main").classList.add("active");
     document.querySelector(".ld").classList.remove("active");
 }
 

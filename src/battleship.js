@@ -275,8 +275,8 @@ function celebro(cord = null, player){
         
         
 
-        if(hits[x][y] !== 0 && Misses[x][y] !== 0){
-            while(hits[x][y] !== 0 && Misses[x][y] !== 0){
+        if(hits[x][y] !== 0 || Misses[x][y] !== 0){
+            while(hits[x][y] !== 0 || Misses[x][y] !== 0){
                 x = Math.floor(Math.random() * 10);
                 y = Math.floor(Math.random() * 10);
             }
