@@ -319,7 +319,8 @@ function gameWrapper(){
 
                 }else if(isHit === 2){
                     domManager.updateCell(rIndex, cIndex, true, table);
-                    domManager.announceWinner(boardEngine.getCurrentPlayer());
+                    let winner = player.name === 'Enemy' ? name.value : 'Enemy';
+                    domManager.announceWinner(winner);
 
                 }else{
                     domManager.updateCell(rIndex, cIndex, false, table);
